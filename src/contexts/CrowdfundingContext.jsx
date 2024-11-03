@@ -1,14 +1,13 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { contractAddress, contractABI } from '../utils/contractHelpers';
-import { set } from 'mongoose';
 
 const CrowdfundingContext = createContext();
 
 export const CrowdfundingProvider = ({ children }) => {
   const [contract, setContract] = useState(null);
   const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isProjectCreator, setIsProjectCreator] = useState(false);
@@ -50,7 +49,7 @@ export const CrowdfundingProvider = ({ children }) => {
     durationInDays
   ) => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const tx = await contract.createProject(
         title,
         description,
@@ -71,7 +70,7 @@ export const CrowdfundingProvider = ({ children }) => {
   // Contribute to project
   const contribute = async (projectId, amount) => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const tx = await contract.contribute(projectId, {
         value: ethers.utils.parseEther(amount.toString()),
       });
@@ -95,7 +94,7 @@ export const CrowdfundingProvider = ({ children }) => {
     proofUrl
   ) => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const tx = await contract.submitExpense(
         projectId,
         description,
@@ -116,7 +115,7 @@ export const CrowdfundingProvider = ({ children }) => {
   // Approve expense
   const approveExpense = async (projectId, expenseIndex) => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const tx = await contract.approveExpense(projectId, expenseIndex);
       await tx.wait();
       setLoading(false);
@@ -131,7 +130,7 @@ export const CrowdfundingProvider = ({ children }) => {
   // Load projects
   const loadProjects = async () => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const projectCount = await contract.projectCount();
       const projectsData = await Promise.all(
         Array(projectCount.toNumber())
@@ -161,7 +160,7 @@ export const CrowdfundingProvider = ({ children }) => {
   // Claim refund
   const claimRefund = async (projectId) => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const tx = await contract.claimRefund(projectId);
       await tx.wait();
       setLoading(false);
